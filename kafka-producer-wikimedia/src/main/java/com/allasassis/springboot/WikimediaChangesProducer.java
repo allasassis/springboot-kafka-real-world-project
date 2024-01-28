@@ -22,12 +22,12 @@ public class WikimediaChangesProducer {
     }
 
     public void sendMessage() throws InterruptedException {
-        String topic = "${spring.kafka.topic.name}";
-        EventHandler ev = new WikimediaChangesHandler(kafkaTemplate, topic);
+        EventHandler eventHandler = new WikimediaChangesHandler(kafkaTemplate, "wikimedia_recentchange");
         String url = "https://stream.wikimedia.org/v2/stream/recentchange";
-        EventSource.Builder builder = new EventSource.Builder(ev, URI.create(url));
+        EventSource.Builder builder = new EventSource.Builder(eventHandler, URI.create(url));
         EventSource eventSource = builder.build();
         eventSource.start();
+
         TimeUnit.MINUTES.sleep(10);
     }
 }
